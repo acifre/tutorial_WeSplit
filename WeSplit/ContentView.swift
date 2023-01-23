@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     
-    
+    @FocusState private var amountIsFocused: Bool
     
     @State private var checkAmount = 20.0
     @State private var numberOfPeople = 0
@@ -24,6 +24,11 @@ struct ContentView: View {
         
     }
     
+    var totalAmount: Double {
+        let tipSelection = (Double(chosenPercentage) * 0.01) + 1
+        return checkAmount + tipSelection
+    }
+    
     //let peopleCount = Double(numberOfPeople + 2)
     
     var body: some View {
@@ -34,6 +39,7 @@ struct ContentView: View {
                     Section("Check Amount") {
                         TextField("Check Amount", value: $checkAmount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
                             .keyboardType(.decimalPad)
+                            .focused($amountIsFocused)
                     }
                     
                     Section("Amount of People Splitting Check") {
@@ -46,11 +52,10 @@ struct ContentView: View {
                     }
                     Section("How much tip do you want to leave?") {
                         Picker("Select your tip percentage", selection: $chosenPercentage) {
-                            ForEach(tipPercentages, id: \.self) { number in
+                            ForEach(0..<101) { number in
                                 Text(number, format: .percent)
                             }
                         }
-                        .pickerStyle(.segmented)
                     }
                     
                     Section("Summary") {
@@ -60,16 +65,34 @@ struct ContentView: View {
                         }
                         Text("Tip Percentage: \(chosenPercentage)%")
                         Text("Number of People: \(numberOfPeople + 2)")
+
+                    }
+                    
+                    Section("Final Amounts") {
                         HStack {
+                            Text("Total Check Amount:")
+                            Text(totalAmount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                        }
+                        HStack {
+                            
                             Text("Total per person:")
                             Text(totalPerPerson, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
                         }
+                        .fontWeight(.bold)
                     }
                 }
 
             }
             .navigationTitle("WeSplit")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button("Done") {
+                        amountIsFocused = false
+                    }
+                }
+            }
         }
     }
 }
@@ -77,5 +100,6 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+            .preferredColorScheme(.dark)
     }
 }
