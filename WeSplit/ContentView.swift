@@ -11,7 +11,7 @@ struct ContentView: View {
     
     @FocusState private var amountIsFocused: Bool
     
-    @State private var checkAmount = 20.0
+    @State private var checkAmount = 0.0
     @State private var numberOfPeople = 0
     @State private var chosenPercentage = 18
     
@@ -42,7 +42,7 @@ struct ContentView: View {
                             .focused($amountIsFocused)
                     }
                     
-                    Section("Amount of People Splitting Check") {
+                    Section("Number of People Splitting Check") {
                         Picker("Select number of people:", selection: $numberOfPeople) {
                             ForEach(2..<100) { number in
                                 Text("\(number) people")
@@ -51,7 +51,7 @@ struct ContentView: View {
                         //.pickerStyle(.wheel)
                     }
                     Section("How much tip do you want to leave?") {
-                        Picker("Select your tip percentage", selection: $chosenPercentage) {
+                        Picker("Select your tip percentage:", selection: $chosenPercentage) {
                             ForEach(0..<101) { number in
                                 Text(number, format: .percent)
                             }
@@ -71,11 +71,11 @@ struct ContentView: View {
                     Section("Final Amounts") {
                         HStack {
                             Text("Total Check Amount:")
-                            Text(totalAmount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                            Text((checkAmount > 0 ? totalAmount : 0.0), format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
                         }
                         HStack {
                             
-                            Text("Total per person:")
+                            Text("Total Per Person:")
                             Text(totalPerPerson, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
                         }
                         .fontWeight(.bold)
