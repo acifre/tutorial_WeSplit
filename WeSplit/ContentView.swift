@@ -9,18 +9,18 @@ import SwiftUI
 
 struct ContentView: View {
     
-    let tipPercentages = [0, 10, 15, 18, 20, 25]
+    
     
     @State private var checkAmount = 20.0
     @State private var numberOfPeople = 0
-    
-    
-    @State private var tapCount = 0
     @State private var chosenPercentage = 18
+    
+    let tipPercentages = [0, 10, 15, 18, 20, 25]
     
     var totalPerPerson: Double {
         let peopleCount = Double(numberOfPeople + 2)
-        return (checkAmount * ((Double(chosenPercentage) * 0.01) + 1)) / peopleCount
+        let tipSelection = (Double(chosenPercentage) * 0.01) + 1
+        return (checkAmount * tipSelection) / peopleCount
         
     }
     
@@ -34,13 +34,8 @@ struct ContentView: View {
                     Section("Check Amount") {
                         TextField("Check Amount", value: $checkAmount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
                             .keyboardType(.decimalPad)
-                            .padding()
                     }
                     
-                    Section {
-                        Text(checkAmount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
-                            .padding()
-                    }
                     Section("Amount of People Splitting Check") {
                         Picker("Select number of people:", selection: $numberOfPeople) {
                             ForEach(2..<100) { number in
@@ -59,10 +54,16 @@ struct ContentView: View {
                     }
                     
                     Section("Summary") {
-                        Text("Check Amount: \(round(checkAmount))")
+                        HStack {
+                            Text("Check Amount:")
+                            Text(checkAmount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                        }
                         Text("Tip Percentage: \(chosenPercentage)%")
                         Text("Number of People: \(numberOfPeople + 2)")
-                        Text("Total per person: \(totalPerPerson)")
+                        HStack {
+                            Text("Total per person:")
+                            Text(totalPerPerson, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                        }
                     }
                 }
 
