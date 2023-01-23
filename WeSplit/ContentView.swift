@@ -70,7 +70,7 @@ struct ContentView: View {
 
                     }
                     
-                    Section("Final Amounts") {
+                    Section("Final Amount") {
                         HStack {
                             Text("Total Check Amount:")
                             Text((checkAmount > 0 ? totalAmount : 0.0), format: currencyFormat)
