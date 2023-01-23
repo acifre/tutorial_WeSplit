@@ -29,7 +29,9 @@ struct ContentView: View {
         return checkAmount + tipSelection
     }
     
-    //let peopleCount = Double(numberOfPeople + 2)
+    var currencyFormat: FloatingPointFormatStyle<Double>.Currency {
+        return .currency(code: Locale.current.currency?.identifier ?? "USD")
+    }
     
     var body: some View {
         NavigationView {
@@ -37,7 +39,7 @@ struct ContentView: View {
                 Form {
 
                     Section("Check Amount") {
-                        TextField("Check Amount", value: $checkAmount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                        TextField("Check Amount", value: $checkAmount, format: currencyFormat)
                             .keyboardType(.decimalPad)
                             .focused($amountIsFocused)
                     }
@@ -61,7 +63,7 @@ struct ContentView: View {
                     Section("Summary") {
                         HStack {
                             Text("Check Amount:")
-                            Text(checkAmount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                            Text(checkAmount, format: currencyFormat)
                         }
                         Text("Tip Percentage: \(chosenPercentage)%")
                         Text("Number of People: \(numberOfPeople + 2)")
@@ -71,12 +73,12 @@ struct ContentView: View {
                     Section("Final Amounts") {
                         HStack {
                             Text("Total Check Amount:")
-                            Text((checkAmount > 0 ? totalAmount : 0.0), format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                            Text((checkAmount > 0 ? totalAmount : 0.0), format: currencyFormat)
                         }
                         HStack {
                             
                             Text("Total Per Person:")
-                            Text(totalPerPerson, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                            Text(totalPerPerson, format: currencyFormat)
                         }
                         .fontWeight(.bold)
                     }
