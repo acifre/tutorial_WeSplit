@@ -74,6 +74,7 @@ struct ContentView: View {
                         HStack {
                             Text("Total Check Amount:")
                             Text((checkAmount > 0 ? totalAmount : 0.0), format: currencyFormat)
+                                .foregroundColor(chosenPercentage == 0 ? .red : .primary)
                         }
                         HStack {
                             
